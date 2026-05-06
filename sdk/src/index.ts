@@ -15,6 +15,8 @@ export * from './ingestion';
 export * from './storage';
 export * from './query';
 export * from './protocols';
+export * from './workflow';
+export * from './logs';
 
 export const version = '1.0.0';
 export const name = '@om-agent/sdk';
