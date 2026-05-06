@@ -168,25 +168,66 @@ function ChatInterface({ user, onLogout }) {
   );
 }
 
-// Main App with SSO
+// Main App with NextAuth - Auto preload
 export default function OpenMetadataApp() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Check for existing session
+  // Auto-preload session on mount
   useEffect(() => {
-    const saved = localStorage.getItem('om-user');
-    if (saved) setUser(JSON.parse(saved));
+    async function preloadSession() {
+      try {
+        // Try NextAuth session
+        const res = await fetch('/api/auth/session');
+        if (res.ok) {
+          const session = await res.json();
+          if (session?.user) {
+            setUser({
+              name: session.user.name || session.user.email?.split('@')[0] || 'User',
+              email: session.user.email,
+              provider: session.provider || 'oauth'
+            });
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (e) {
+        console.log('No NextAuth session, checking localStorage...');
+      }
+      
+      // Fallback: check localStorage (demo mode)
+      const saved = localStorage.getItem('om-user');
+      if (saved) {
+        setUser(JSON.parse(saved));
+      }
+      setLoading(false);
+    }
+    preloadSession();
   }, []);
 
-  const handleLogin = (userData) => {
-    setUser(userData);
-    localStorage.setItem('om-user', JSON.stringify(userData));
+  const handleLogin = (provider: string) => {
+    // NextAuth/oauth redirect
+    window.location.href = `/api/auth/signin/${provider}`;
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/signout', { method: 'POST' });
+    } catch (e) {}
     setUser(null);
     localStorage.removeItem('om-user');
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-10 h-10 mx-auto border-2 border-primary border-t-transparent rounded-full animate-spin mb-4" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return user ? (
     <ChatInterface user={user} onLogout={handleLogout} />
