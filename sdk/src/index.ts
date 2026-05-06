@@ -17,6 +17,7 @@ export * from './query';
 export * from './protocols';
 export * from './workflow';
 export * from './logs';
+export { default as UI } from './ui';
 
 export const version = '1.0.0';
 export const name = '@om-agent/sdk';
