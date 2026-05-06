@@ -1,0 +1,29 @@
+{
+  "name": "@om-agent/chat",
+  "version": "1.0.0",
+  "description": "OpenMetadata Manager Chat UI with NextAuth",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "next-auth": "^4.0.0",
+    "lucide-react": "^0.300.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["openmetadata", "chat", "ui", "nextauth", "sso"],
+  "license": "MIT"
+}
