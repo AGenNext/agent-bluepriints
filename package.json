@@ -1,0 +1,17 @@
+{
+  "name": "agent-blueprints",
+  "private": true,
+  "workspaces": [
+    "sdk",
+    "site"
+  ],
+  "scripts": {
+    "dev": "npm --workspace site run dev",
+    "build": "npm --workspace site run build",
+    "lint": "npm --workspace site run lint --if-present",
+    "test": "echo \"No tests configured yet\""
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
